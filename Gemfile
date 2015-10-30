@@ -34,7 +34,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'sqlite3'
 end
+
+group :production do
+  gem 'pg'
+end 
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
