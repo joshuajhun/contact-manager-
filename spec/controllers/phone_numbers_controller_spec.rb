@@ -24,12 +24,12 @@ RSpec.describe PhoneNumbersController, type: :controller do
   # PhoneNumber. As you add validations to PhoneNumber, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    { number: "MyString", person_id: 1 }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+     { number: nil, person_id: nil }
+   }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -67,8 +67,11 @@ RSpec.describe PhoneNumbersController, type: :controller do
     end
   end
 
-  describe "POST #create" do
-    context "with valid params" do
+  describe "POST create" do
+    describe "with valid params" do
+      let(:valid_attributes) { {number: '555-1234', person_id: alice.id} }
+      let(:alice) { Person.create(first_name: 'Alice', last_name: 'Smith') }
+
       it "creates a new PhoneNumber" do
         expect {
           post :create, {:phone_number => valid_attributes}, valid_session
@@ -81,9 +84,11 @@ RSpec.describe PhoneNumbersController, type: :controller do
         expect(assigns(:phone_number)).to be_persisted
       end
 
-      it "redirects to the created phone_number" do
-        post :create, {:phone_number => valid_attributes}, valid_session
-        expect(response).to redirect_to(PhoneNumber.last)
+      it "redirects to the phone number's person" do
+      alice = Person.create(first_name: 'Alice', last_name: 'Smith')
+      valid_attributes = {number: '555-8888', person_id: alice.id}
+      post :create, {:phone_number => valid_attributes}, valid_session
+      expect(response).to redirect_to(alice)
       end
     end
 
@@ -103,14 +108,15 @@ RSpec.describe PhoneNumbersController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {number: 'MyNewString', person_id: 2}
       }
 
       it "updates the requested phone_number" do
         phone_number = PhoneNumber.create! valid_attributes
         put :update, {:id => phone_number.to_param, :phone_number => new_attributes}, valid_session
         phone_number.reload
-        skip("Add assertions for updated state")
+        expect(phone_number.number).to eq('MyNewString')
+        expect(phone_number.person_id).to eq(2)
       end
 
       it "assigns the requested phone_number as @phone_number" do
