@@ -66,8 +66,8 @@ describe 'the email view', type: :feature do
     expect(page).to have_selector('li', text: 'john@gmail.com')
   end
 
-  it 'has a link to add new email address ' do
-    expect(page).to have_link('Add email address', href: new_email_address_path(person_id: person.id))
+  xit 'has a link to add new email address ' do
+    expect(page).to have_link('Add email address', href: new_email_address_path(contact_id: person_id, contact_type: 'Person' ))
   end
 
   it "new_email_address" do
